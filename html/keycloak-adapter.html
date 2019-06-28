@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Future Imperfect</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="../assets/css/main.css"/>
+</head>
+<body class="single is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <h1><a href="../index.html">返回主页</a></h1>
+    </header>
+
+    <!-- Main -->
+    <div id="main">
+
+        <!-- Post -->
+        <article class="post">
+            <header>
+                <div class="title">
+                    <h2><a href="#">用户统一鉴权服务-适配器使用</a></h2>
+                </div>
+                <div class="meta">
+                    <time class="published" datetime="2015-11-01">2018年11月10日</time>
+                    <a href="#" class="author"><span class="name">lhy</span><img src="../images/avatar.jpg" alt=""/></a>
+                </div>
+            </header>
+            <!--<span class="image featured"><img src="images/pic02.jpg" alt=""/></span>-->
+            <h3>1.环境准备</h3>
+            <p>一个可以正常运行的spring boot的任意demo</p>
+            <h3>2.创建realm</h3>
+            <p>Realm 类似于租户的概念，不同realm 中的用户完全隔离<br>
+                realm里的用户可实现单点登录。一般realm在管理界面上创建，也可以用管理员API创建<br>
+                在界面上手动创建一个demo的realm。
+            </p>
+            <h3>3.用户管理</h3>
+            <p>公共代码：</p>
+            <code style="color: black;">
+                Keycloak keycloak = KeycloakBuilder.builder()<br>
+                &nbsp;&nbsp;.serverUrl("http://111.202.198.105:28080/auth")<br>
+                &nbsp;&nbsp;.realm("master")<br>
+                &nbsp;&nbsp;.clientId("admin-cli")<br>
+                &nbsp;&nbsp;.username("kyland")<br>
+                &nbsp;&nbsp;.password("abc123kyland")<br>
+                &nbsp;&nbsp;.build();<br>
+                RealmResource realmResource = keycloak.realm("demo");<br>
+                UsersResource userRessource = realmResource.users();<br>
+                <br>
+                //创建用户<br>
+                // Define user<br>
+                UserRepresentation user = new UserRepresentation();<br>
+                user.setEnabled(true);<br>
+                user.setUsername("tester1");<br>
+                user.setFirstName("First");<br>
+                user.setLastName("Last");<br>
+                user.setEmail("tom+tester1@tdlabs.local");<br>
+                user.setAttributes(Collections.singletonMap("origin", Arrays.asList("demo")));<br>
+                // Create user (requires manage-users role)<br>
+                userRessource.create(user);<br>
+                <br>
+                //更新用户信息<br>
+                UserResource user = userRessource.get(user_id);<br>
+                <br>
+                //获取用户信息<br>
+                userRessource.get(user_id)；<br>
+                <br>
+                //删除用户<br>
+                userRessource.delete(user_id)<br>
+            </code>
+            <p></p>
+            <h3>4.角色管理</h3>
+            <p>角色分两种，一种是app的角色，一种是realm的角色。</p>
+            <code style="color: black;">
+                //公共代码：<br>
+                RolesResource roleRessource = realmResource.roles();<br>
+                //获取app角色<br>
+                roleRessource.list()<br>
+                //创建app角色<br>
+                RoleRepresentation role = new RoleRepresentation();<br>
+                role.setId();<br>
+                role.setName();<br>
+                ...<br>
+                roleRessource.create(role)<br>
+            </code>
+            <p></p>
+            <h3>5.认证</h3>
+            <code style="color: black">
+                Keycloak keycloak = KeycloakBuilder.builder()<br>
+                &nbsp;&nbsp;.serverUrl("http://111.202.198.105:28080/auth")<br>
+                &nbsp;&nbsp;.realm("master")<br>
+                &nbsp;&nbsp;.clientId("admin-cli")<br>
+                &nbsp;&nbsp;.username("kyland")<br>
+                &nbsp;&nbsp;.password("abc123kyland")<br>
+                &nbsp;&nbsp;.build();<br>
+            </code>
+            <p></p>
+            <h3>6.客户端获取用户信息</h3>
+            <code style="color: black">
+                //当前登录用户信息：<br>
+                RefreshableKeycloakSecurityContext context =  (RefreshableKeycloakSecurityContext)request.getAttribute("org.keycloak.KeycloakSecurityContext");<br>
+                <br>
+                AccessToken token = context.getToken();<br>
+                String sub = token.getSubject();//用户内码<br>
+                System.out.println(sub);<br>
+                String loginName = token.getPreferredUsername();//登录账号<br>
+                System.out.println(loginName);<br>
+                <br>
+                //Realm角色列表<br>
+                AccessToken.Access access = token.getRealmAccess();<br>
+                Set&lt;String&gt; roles =  access.getRoles();<br>
+                System.out.println(roles);<br>
+            </code>
+            <p></p>
+            <h3>7.最后，附上pom文件内容</h3>
+            <textarea id="t" style="margin: 0px -41px 0px 0px; width: 1440px; height: 2751px;" readonly></textarea>
+            <script>
+                document.getElementById('t').value="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                    "<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                    "\txsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n" +
+                    "\t<modelVersion>4.0.0</modelVersion>\n" +
+                    "\n" +
+                    "\t<groupId>com.example</groupId>\n" +
+                    "\t<artifactId>demo</artifactId>\n" +
+                    "\t<version>0.0.1-SNAPSHOT</version>\n" +
+                    "\t<packaging>jar</packaging>\n" +
+                    "\n" +
+                    "\t<name>demo</name>\n" +
+                    "\t<description>Demo project for Spring Boot</description>\n" +
+                    "\n" +
+                    "\t<parent>\n" +
+                    "\t\t<groupId>org.springframework.boot</groupId>\n" +
+                    "\t\t<artifactId>spring-boot-starter-parent</artifactId>\n" +
+                    "\t\t<version>2.0.5.RELEASE</version>\n" +
+                    "\t\t<relativePath/> <!-- lookup parent from repository -->\n" +
+                    "\t</parent>\n" +
+                    "\n" +
+                    "\t<properties>\n" +
+                    "\t\t<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n" +
+                    "\t\t<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>\n" +
+                    "\t\t<keycloak.version>4.2.0.Final</keycloak.version>\n" +
+                    "\t\t<resteasy.version>3.1.4.Final</resteasy.version>\n" +
+                    "\t</properties>\n" +
+                    "\n" +
+                    "\t<dependencies>\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.springframework.boot</groupId>\n" +
+                    "\t\t\t<artifactId>spring-boot-starter-freemarker</artifactId>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.springframework.boot</groupId>\n" +
+                    "\t\t\t<artifactId>spring-boot-starter-web</artifactId>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.keycloak</groupId>\n" +
+                    "\t\t\t<artifactId>keycloak-spring-boot-starter</artifactId>\n" +
+                    "\t\t</dependency>\n" +
+                    "\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.springframework.boot</groupId>\n" +
+                    "\t\t\t<artifactId>spring-boot-starter-test</artifactId>\n" +
+                    "\t\t\t<scope>test</scope>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.jboss.resteasy</groupId>\n" +
+                    "\t\t\t<artifactId>resteasy-jackson2-provider</artifactId>\n" +
+                    "\t\t\t<version>${resteasy.version}</version>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.jboss.resteasy</groupId>\n" +
+                    "\t\t\t<artifactId>resteasy-client</artifactId>\n" +
+                    "\t\t\t<version>${resteasy.version}</version>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.keycloak</groupId>\n" +
+                    "\t\t\t<artifactId>keycloak-admin-client</artifactId>\n" +
+                    "\t\t\t<version>${keycloak.version}</version>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t</dependencies>\n" +
+                    "\n" +
+                    "\t<dependencyManagement>\n" +
+                    "\t\t<dependencies>\n" +
+                    "\t\t\t<dependency>\n" +
+                    "\t\t\t\t<groupId>org.keycloak.bom</groupId>\n" +
+                    "\t\t\t\t<artifactId>keycloak-adapter-bom</artifactId>\n" +
+                    "\t\t\t\t<version>${keycloak.version}</version>\n" +
+                    "\t\t\t\t<type>pom</type>\n" +
+                    "\t\t\t\t<scope>import</scope>\n" +
+                    "\t\t\t</dependency>\n" +
+                    "\t\t</dependencies>\n" +
+                    "\t</dependencyManagement>\n" +
+                    "\n" +
+                    "\t<build>\n" +
+                    "\t\t<plugins>\n" +
+                    "\t\t\t<plugin>\n" +
+                    "\t\t\t\t<groupId>org.springframework.boot</groupId>\n" +
+                    "\t\t\t\t<artifactId>spring-boot-maven-plugin</artifactId>\n" +
+                    "\t\t\t</plugin>\n" +
+                    "\t\t</plugins>\n" +
+                    "\t</build>\n" +
+                    "</project>\n";
+            </script>
+        </article>
+        <ul class="actions">
+            <li><a href="../index.html" class="button large">返回主页</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/browser.min.js"></script>
+<script src="../assets/js/breakpoints.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+
+</body>
+</html>
