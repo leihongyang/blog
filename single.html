@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Future Imperfect</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+</head>
+<body class="single is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <h1><a href="index.html">返回主页</a></h1>
+    </header>
+
+    <!-- Main -->
+    <div id="main">
+
+        <!-- Post -->
+        <article class="post">
+            <header>
+                <div class="title">
+                    <h2><a href="#">idea 无法添加go sdk的问题</a></h2>
+                    <p>因为网上资料都不可用，可能因为我的是商业版的原因，so，自己研究了下，以下是过程</p>
+                </div>
+                <div class="meta">
+                    <time class="published" datetime="2015-11-01">2018年5月2日</time>
+                    <a href="#" class="author"><span class="name">lhy</span><img src="images/avatar.jpg" alt=""/></a>
+                </div>
+            </header>
+            <span class="image featured"><img src="images/pic01.jpg" alt=""/></span>
+            <h3>1.插件源码下载地址</h3>
+            <code>https://github.com/go-lang-plugin-org/go-lang-idea-plugin</code>
+            <p></p>
+            <h3>2.源码解压，idea打开源码项目</h3>
+            <p>修改gradle.properties文件中，将ideaVersion改为你自己idea版本，修改localIdePath指向你的idea安装目录</p>
+            <h3>3.进入idea工程设置</h3>
+            <p>配置sdks，添加jdk和idea platform plugin sdk（idea安装目录）</p>
+            <p>配置project sdk 为idea platform plugin sdk</p>
+            <p>配置modules，选中插件工程目录，下一步不要选择创建，选择导入，以gradle方式</p>
+            <p>配置artifacts，选择jar ---> all modules，ok</p>
+            <h3>4.编译</h3>
+            <code>build artifacts</code>
+            <p>首次编译会有许多错误，需要将错误都改好了才会成功，可能是因为包版本变化引起的，影响不大<br>
+                1）id一项删除<br>
+                2）取变量名字有变化，修改一下就好<br>
+                3）引用静态变量访问不到，直接改为相应字符串<br>
+                再次编译，成功<br>
+                将工程目录的build/idea-sandbox/plugins/Go文件夹拷贝至idea的插件目录，重启idea
+            </p>
+        </article>
+        <ul class="actions">
+            <li><a href="index.html" class="button large">返回主页</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
