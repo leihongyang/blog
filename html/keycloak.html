@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Future Imperfect</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="../assets/css/main.css"/>
+</head>
+<body class="single is-preload">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <h1><a href="../index.html">返回主页</a></h1>
+    </header>
+
+    <!-- Main -->
+    <div id="main">
+
+        <!-- Post -->
+        <article class="post">
+            <header>
+                <div class="title">
+                    <h2><a href="#">Keycloak 配置文档</a></h2>
+                </div>
+                <div class="meta">
+                    <time class="published" datetime="2015-11-01">2018年11月15日</time>
+                    <a href="#" class="author"><span class="name">lhy</span><img src="../images/avatar.jpg" alt=""/></a>
+                </div>
+            </header>
+            <h3>1.创建realm</h3>
+            <span class="image featured"><img src="../images/keycloak/create_realm.png" alt=""/></span>
+            <h3>2.配置client</h3>
+            <p>将localhost和端口换成相应的应用服务器地址和端口即可，其他保持一致<br>
+                创建三个角色，login，admin和user<br>
+                创建两个用户lhy和lei分别赋予admin和user角色<br>
+            </p>
+            <span class="image featured"><img src="../images/keycloak/clientconf.png" alt=""/></span>
+            <h3>3.查看secret</h3>
+            <span class="image featured"><img src="../images/keycloak/secret.png" alt=""/></span>
+            <h3>4.在spring配置文件application.properties中写入以下配置</h3>
+            <textarea id="conf" style="margin: 0px 712px 0px 0px; height: 725px; width: 687px;" readonly></textarea>
+            <script>
+                document.getElementById('conf').value="# realm名称\n" +
+                    "keycloak.realm=lhy-test\n" +
+                    "\n" +
+                    "# keycloak安装服务器的IP和端口\n" +
+                    "keycloak.auth-server-url=http://192.168.110.45:8180/auth\n" +
+                    "\n" +
+                    "keycloak.ssl-required=external\n" +
+                    "\n" +
+                    "# clientID名称\n" +
+                    "keycloak.resource=test\n" +
+                    "\n" +
+                    "keycloak.public-client=false\n" +
+                    "\n" +
+                    "# keycloak client 加密字段，获取方式见上图\n" +
+                    "keycloak.credentials.secret=e57d2022-9e67-48db-8507-ca2ccf78cf18\n" +
+                    "\n" +
+                    "# 给予所有资源访问必须要有登录角色的权限\n" +
+                    "keycloak.securityConstraints[0].authRoles[0] = login\n" +
+                    "keycloak.securityConstraints[0].securityCollections[0].patterns[0] = /*\n" +
+                    "# 此行配置必须加*号\n";
+            </script>
+            <h3>5.项目示例</h3>
+            <textarea id="keycloak-example" style="margin: 0px -37px 0px 0px; height: 814px; width: 1436px;" readonly></textarea>
+            <script>
+                document.getElementById('keycloak-example').value="项目地址：https://github.com/leihongyang/keycloak-spring-boot-demo.git\n" +
+                    "需要将application.properties文件内容替换为需要的内容\n" +
+                    "访问Web服务地址，需要登录，输入带有login角色的用户能够登录。若该用户拥有admin角色就能访问管理员入口，拥有user角色能访问用户入口。\n" +
+                    "\n" +
+                    "程序详解：（环境java1.8，maven3）\n" +
+                    "\t\t1.引入keycloak-spring依赖\n" +
+                    "\t\t<dependency>\n" +
+                    "\t\t\t<groupId>org.keycloak</groupId>\n" +
+                    "\t\t\t<artifactId>keycloak-spring-boot-starter</artifactId>\n" +
+                    "\t\t</dependency>\n" +
+                    "\t\t2.引入keycloak-adapter\n" +
+                    "\t\t<dependencyManagement>\n" +
+                    "\t\t\t<dependencies>\n" +
+                    "\t\t\t\t<dependency>\n" +
+                    "\t\t\t\t\t<groupId>org.keycloak.bom</groupId>\n" +
+                    "\t\t\t\t\t<artifactId>keycloak-adapter-bom</artifactId>\n" +
+                    "\t\t\t\t\t<version>${keycloak.version}</version>\n" +
+                    "\t\t\t\t\t<type>pom</type>\n" +
+                    "\t\t\t\t\t<scope>import</scope>\n" +
+                    "\t\t\t\t</dependency>\n" +
+                    "\t\t\t</dependencies>\n" +
+                    "\t\t\t</dependencyManagement>\n" +
+                    "\t\t3.参照第4节配置spring配置文件，至此程序已经交给keycloak管理了。其余详解见demo注释\n";
+            </script>
+        </article>
+        <ul class="actions">
+            <li><a href="../index.html" class="button large">返回主页</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/browser.min.js"></script>
+<script src="../assets/js/breakpoints.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+
+</body>
+</html>
